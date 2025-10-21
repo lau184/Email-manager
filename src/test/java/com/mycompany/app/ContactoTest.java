@@ -12,4 +12,14 @@ public class ContactoTest {
         assertEquals("Laura", contacto.getNombre());
         assertEquals("laura@ucp.edu.ar", contacto.getEmail());
     }
+
+    @Test
+    public void modificarDatosContacto() {
+        Contacto contacto = new Contacto("Carlos", "carlos@ucp.edu.ar");
+        contacto.setNombre("Carlos Perez");
+        contacto.setEmail("carlos@ucp.edu.ar");
+        
+        assertEquals("Carlos Perez", contacto.getNombre());
+        assertEquals("carlos@ucp.edu.ar", contacto.getEmail());
+    }
 }
