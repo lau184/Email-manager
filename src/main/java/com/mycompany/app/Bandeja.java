@@ -1,57 +1,57 @@
 package com.mycompany.app;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import java.util.function.Predicate; //Sirve para usar Predicate que es una función que devuelve true o false
+import java.util.stream.Collectors; //Sirve para usar Collectors que permite recolectar elementos de un stream en una colección
 
-// Esta clase representa una bandeja (Entrada, Enviados, Borradores)
+//Esta clase representa una bandeja (con Entrada, Enviados, Borradores)
 public class Bandeja {
 
-    private String nombre;          // Nombre de la bandeja
-    private List<Email> correos;    // Lista de correos dentro de la bandeja
+    private String nombre;          //nombre de la bandeja
+    private List<Email> correos;    //lista de correos dentro de la bandeja
 
     public Bandeja(String nombre) {
         this.nombre = nombre;
         this.correos = new ArrayList<>();
     }
 
-    // Devuelve el nombre de la bandeja
+    //devuelve el nombre de la bandeja
     public String getNombre() {
         return nombre;
     }
 
-    // Agrega un correo a la bandeja
+    //agrega un correo a la bandeja
     public void agregar(Email email) {
         if (email != null && !correos.contains(email)) {
             correos.add(email);
         }
     }
 
-    // Elimina un correo de la bandeja
+    //elimina un correo de la bandeja
     public void eliminar(Email email) {
         correos.remove(email);
     }
 
-    // Devuelve una copia de la lista de correos (para no modificar la original)
+    //devuelve una copia de la lista de correos (para no modificar la original)
     public List<Email> getCorreos() {
         return new ArrayList<>(correos);
     }
 
-    // Busca correos que cumplan con una condición predicate
+    //busca correos que cumplan con una condición predicate
     public List<Email> buscar(Predicate<Email> criterio) {
         return correos.stream()
                 .filter(criterio)
                 .collect(Collectors.toList());
     }
 
-    // Mueve un correo desde esta bandeja hacia otra
+    //mueve un correo desde esta bandeja hacia otra
     public void moverA(Email email, Bandeja destino) {
         if (correos.remove(email)) {
             destino.agregar(email);
         }
     }
 
-    // Elimina todos los correos
+    //elimina todos los correos
     public void vaciar() {
         correos.clear();
     }
