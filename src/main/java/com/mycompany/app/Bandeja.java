@@ -37,7 +37,7 @@ public class Bandeja {
         return new ArrayList<>(correos);
     }
 
-    // Busca correos que cumplan con una condición (Predicate)
+    // Busca correos que cumplan con una condición predicate
     public List<Email> buscar(Predicate<Email> criterio) {
         return correos.stream()
                 .filter(criterio)
