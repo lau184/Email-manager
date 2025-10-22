@@ -2,6 +2,8 @@ package com.mycompany.app;
 
 import java.util.*;
 
+
+/** Servicio muy simple y sin estado. */
 public class GestorEmails {
 
 

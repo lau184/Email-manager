@@ -1,102 +1,44 @@
 package com.mycompany.app;
-import java.util.ArrayList;
+
+import java.util.Objects;
 import java.util.List;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
-// Esta clase representa un correo electrónico dentro del sistema.
+/** RF-01/02: Email básico. */
 public class Email {
+private final String asunto;
+private final String contenido;
+private final Contacto remitente; // único
+private final List<Contacto> para; // uno o varios
+private final LocalDateTime creado;
+private final LocalDateTime enviado; // null si borrador
 
-    private String asunto;          // Asunto del correo
-    private String contenido;       // Cuerpo o texto del correo
-    private Contacto remitente;     // Persona que envía el correo
-    private List<Contacto> para;    // Lista de destinatarios
-    private boolean leido;          // Indica si el correo fue leído o no
-    private boolean favorito;       // Indica si el correo fue marcado como favorito
 
-    // Constructor sin parámetros: crea una lista vacía de destinatarios
-    public Email() {
-        this.para = new ArrayList<>();
-        this.leido = false;
-        this.favorito = false;
-    }
-
-    // Constructor que recibe los datos principales del correo
-    public Email(String asunto, String contenido, Contacto remitente) {
-        this(); // Llama al constructor anterior para inicializar la lista
-        this.asunto = asunto;
-        this.contenido = contenido;
-        this.remitente = remitente;
-    }
-
-    // ---------------- MÉTODOS GETTER Y SETTER ----------------
-
-    public String getAsunto() {
-        return asunto;
-    }
-
-    public void setAsunto(String asunto) {
-        this.asunto = asunto;
-    }
-
-    public String getContenido() {
-        return contenido;
-    }
-
-    public void setContenido(String contenido) {
-        this.contenido = contenido;
-    }
-
-    public Contacto getRemitente() {
-        return remitente;
-    }
-
-    public void setRemitente(Contacto remitente) {
-        this.remitente = remitente;
-    }
-
-    public List<Contacto> getPara() {
-        return para;
-    }
-
-    // ---------------- MÉTODOS DE ACCIÓN ----------------
-
-    // Agrega un destinatario al correo
-    public void agregarPara(Contacto contacto) {
-        if (contacto != null && !para.contains(contacto)) {
-            para.add(contacto);
-        }
-    }
-
-    // Marca el correo como leído
-    public void marcarLeido() {
-        this.leido = true;
-    }
-
-    // Marca el correo como no leído
-    public void marcarNoLeido() {
-        this.leido = false;
-    }
-
-    // Marca el correo como favorito
-    public void marcarFavorito() {
-        this.favorito = true;
-    }
-
-    // Quita el estado de favorito
-    public void desmarcarFavorito() {
-        this.favorito = false;
-    }
-
-    // Devuelve si el correo fue leído
-    public boolean isLeido() {
-        return leido;
-    }
-
-    // Devuelve si el correo fue marcado como favorito
-    public boolean isFavorito() {
-        return favorito;
-    }
-
-    
+private Email(String asunto, String contenido, Contacto remitente, List<Contacto> para,
+LocalDateTime creado, LocalDateTime enviado){
+this.asunto = asunto == null ? "" : asunto;
+this.contenido = contenido == null ? "" : contenido;
+this.remitente = Objects.requireNonNull(remitente);
+this.para = List.copyOf(Objects.requireNonNull(para));
+this.creado = Objects.requireNonNull(creado);
+this.enviado = enviado; // puede ser null
 }
 
 
+public static Email borrador(Contacto remitente, List<Contacto> para, String asunto, String contenido){
+if (para == null || para.isEmpty()) throw new IllegalArgumentException("Debe haber al menos un destinatario");
+return new Email(asunto, contenido, remitente, para, LocalDateTime.now(), null);
+}
+public Email marcarEnviado(){
+return new Email(asunto, contenido, remitente, para, creado, LocalDateTime.now());
+}
+
+
+public String getAsunto(){ return asunto; }
+public String getContenido(){ return contenido; }
+public Contacto getRemitente(){ return remitente; }
+public List<Contacto> getPara(){ return para; }
+public boolean esBorrador(){ return enviado == null; }
+public Optional<LocalDateTime> getEnviado(){ return Optional.ofNullable(enviado); }
+}
